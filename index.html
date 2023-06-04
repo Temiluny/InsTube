@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>InsTube</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="Javascript.js"></script>
+  <style>
+    /* Estilos adicionales para las publicaciones */
+    .publicacion {
+      position: relative;
+    }
+
+    .publicacion .imagen {
+      position: relative;
+      display: inline-block;
+    }
+
+    .publicacion .eliminar {
+      position: absolute;
+      bottom: 4px;
+      right: 5px;
+      background-color: #C600EA;
+      color: #FFFFFF;
+      padding: 5px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .publicacion p {
+      color: white; /* Color de texto blanco */
+    }
+  </style>
+</head>
+<body>
+	
+	
+	<div class="contenedor" align="justify">
+	
+  <header>
+    <h1>InsTube</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="Chat.html">Chat</a></li>
+    </ul>
+  </nav>
+	
+
+  <main>
+    <h2>Publicar foto</h2>
+    <form>
+      <label for="nombre-usuario-foto">Nombre de usuario:</label>
+      <input type="text" id="nombre-usuario-foto" required>
+
+      <label for="descripcion-foto">Descripción:</label>
+      <input type="text" id="descripcion-foto" required>
+
+      <label for="imagen-foto">Imagen:</label>
+      <input type="file" id="imagen-foto" accept="image/*" required>
+
+      <button type="button" onclick="publicarFoto()">Publicar</button>
+    </form>
+
+    <h2>Publicaciones</h2>
+    <div id="publicaciones-container"></div>
+	  
+	  
+	  
+  </main>
+
+  <footer>
+    <p>© 2023 Simulador de red Social. Todos los derechos reservados.</p>
+  </footer>
+		
+	</div>
+		
+
+	
+	
+</body>
+</html>

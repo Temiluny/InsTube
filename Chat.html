@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Simulador de Chat</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Estilos CSS para el chat */
+    .chat-container {
+      width: 400px;
+      height: 500px;
+      border: 1px solid #ccc;
+      overflow-y: scroll;
+      margin: 0 auto; /* Centra el contenedor horizontalmente */
+    }
+
+    .message {
+      margin-bottom: 10px;
+      text-align: justify;
+      word-break: break-word;
+    }
+
+    .message .sender {
+      font-weight: bold;
+    }
+
+    .message .timestamp {
+      color: #999;
+      font-size: 0.8em;
+    }
+
+    .input-container {
+      margin-top: 10px;
+    }
+
+    .respuesta {
+      color: #FF8D4F;
+    }
+
+    /* Estilos CSS para el botón "Responder" */
+    .btn-responder {
+      background-color: #FF8D4F;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .btn-responder:hover {
+      background-color: #FF6439;
+    }
+  </style>
+  <script>
+    function enviarMensaje() {
+      var mensajeInput = document.getElementById('mensaje');
+      var mensaje = mensajeInput.value;
+
+      if (mensaje) {
+        var chatContainer = document.getElementById('chat-container');
+
+        var mensajeElement = document.createElement('div');
+        mensajeElement.classList.add('message');
+
+        var senderElement = document.createElement('span');
+        senderElement.classList.add('sender');
+        senderElement.textContent = document.getElementById('nombreUsuarioInput').value + ": ";
+        mensajeElement.appendChild(senderElement);
+
+        var textoElement = document.createElement('span');
+        textoElement.textContent = mensaje;
+        mensajeElement.appendChild(textoElement);
+
+        var timestampElement = document.createElement('span');
+        timestampElement.classList.add('timestamp');
+        var fechaHora = new Date();
+        timestampElement.textContent = fechaHora.toLocaleString();
+        mensajeElement.appendChild(timestampElement);
+
+        chatContainer.appendChild(mensajeElement);
+
+        mensajeInput.value = '';
+
+        // Guardar mensaje en el almacenamiento local
+        var mensajesGuardados = JSON.parse(localStorage.getItem('mensajes')) || [];
+        mensajesGuardados.push({
+          sender: senderElement.textContent,
+          message: textoElement.textContent,
+          timestamp: timestampElement.textContent
+        });
+        localStorage.setItem('mensajes', JSON.stringify(mensajesGuardados));
+
+        // Habilitar el botón "Responder"
+        document.getElementById('respuesta').disabled = false;
+      }
+    }
+
+    function enviarRespuesta() {
+      var respuestaInput = document.getElementById('respuesta');
+      var respuesta = respuestaInput.value;
+
+      if (respuesta) {
+        var chatContainer = document.getElementById('chat-container');
+
+        var respuestaElement = document.createElement('div');
+        respuestaElement.classList.add('message');
+        respuestaElement.classList.add('respuesta');
+
+        var senderElement = document.createElement('span');
+        senderElement.classList.add('sender');
+        senderElement.textContent = document.getElementById('nombreBotInput').value + ": ";
+        respuestaElement.appendChild(senderElement);
+
+        var textoElement = document.createElement('span');
+        textoElement.textContent = respuesta;
+        respuestaElement.appendChild(textoElement);
+
+        var timestampElement = document.createElement('span');
+        timestampElement.classList.add('timestamp');
+        var fechaHora = new Date();
+        timestampElement.textContent = fechaHora.toLocaleString();
+        respuestaElement.appendChild(timestampElement);
+
+        var ultimoMensaje = chatContainer.lastElementChild;
+        if (ultimoMensaje && ultimoMensaje.classList.contains('message')) {
+          chatContainer.insertBefore(respuestaElement, ultimoMensaje.nextSibling);
+        } else {
+          chatContainer.appendChild(respuestaElement);
+        }
+
+        respuestaInput.value = '';
+
+        // Guardar respuesta en el almacenamiento local
+        var mensajesGuardados = JSON.parse(localStorage.getItem('mensajes')) || [];
+        mensajesGuardados.push({
+          sender: senderElement.textContent,
+          message: textoElement.textContent,
+          timestamp: timestampElement.textContent
+        });
+        localStorage.setItem('mensajes', JSON.stringify(mensajesGuardados));
+
+        // Deshabilitar el botón "Responder"
+        respuestaInput.disabled = true;
+      }
+    }
+
+    function cargarMensajesGuardados() {
+      var mensajesGuardados = JSON.parse(localStorage.getItem('mensajes')) || [];
+
+      var chatContainer = document.getElementById('chat-container');
+      chatContainer.innerHTML = ''; // Limpiar el chatContainer antes de cargar los mensajes guardados
+
+      for (var i = 0; i < mensajesGuardados.length; i++) {
+        var mensaje = mensajesGuardados[i];
+
+        var mensajeElement = document.createElement('div');
+        mensajeElement.classList.add('message');
+
+        var senderElement = document.createElement('span');
+        senderElement.classList.add('sender');
+        senderElement.textContent = mensaje.sender;
+        mensajeElement.appendChild(senderElement);
+
+        var textoElement = document.createElement('span');
+        textoElement.textContent = mensaje.message;
+        mensajeElement.appendChild(textoElement);
+
+        var timestampElement = document.createElement('span');
+        timestampElement.classList.add('timestamp');
+        timestampElement.textContent = mensaje.timestamp;
+        mensajeElement.appendChild(timestampElement);
+
+        chatContainer.appendChild(mensajeElement);
+      }
+    }
+
+    function resetearChat() {
+      // Limpiar mensajes guardados en el almacenamiento local
+      localStorage.removeItem('mensajes');
+
+      // Limpiar chatContainer
+      var chatContainer = document.getElementById('chat-container');
+      chatContainer.innerHTML = '';
+
+      // Deshabilitar el botón "Responder"
+      document.getElementById('respuesta').disabled = true;
+    }
+
+    window.onload = cargarMensajesGuardados;
+  </script>
+</head>
+<body>
+	
+	<div class="contenedor" align="justify">
+	
+  <header>
+    <h1>InsTube</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="Chat.html">Chat</a></li><br>
+		
+    </ul>
+  </nav>
+
+  <main>
+    <h1>Chat Simulator</h1>
+
+    <div id="chat-container" class="chat-container"></div>
+
+    <div class="input-container">
+      <input type="text" id="nombreUsuarioInput" placeholder="Nombre de Usuario">
+      <input type="text" id="mensaje" placeholder="Escribe un mensaje">
+      <button onclick="enviarMensaje()">Enviar</button>
+    </div>
+
+    <div class="input-container">
+      <input type="text" id="nombreBotInput" placeholder="Nombre del Bot">
+      <input type="text" id="respuesta" placeholder="Escribe una respuesta" disabled>
+      <button onclick="enviarRespuesta()" class="btn-responder">Responder</button>
+    </div>
+    
+    <div class="input-container">
+      <button onclick="resetearChat()">Resetear Chat</button>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2023 Simulador de Chat. Todos los derechos reservados.</p>
+  </footer>
+	
+	</div>
+	
+</body>
+</html>
