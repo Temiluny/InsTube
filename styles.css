@@ -121,3 +121,12 @@ footer {
   padding: 20px;
   text-align: center;
 }
+
+
+.chat-container {
+      width: 40%;
+      height: 500px;
+      border: 1px solid #ccc;
+      overflow-y: scroll;
+      margin: 0 auto; /* Centra el contenedor horizontalmente */
+    }
